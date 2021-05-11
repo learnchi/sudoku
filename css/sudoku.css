@@ -1,0 +1,4 @@
+@charset "UTF-8";
+table.maintable tr td {
+	border-width:1px;
+}
