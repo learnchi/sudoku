@@ -2,3 +2,15 @@
 table.maintable tr td {
 	border-width:1px;
 }
+table.maintable tr:nth-child(1) {
+	border-top-width:2px;
+}
+table.maintable tr:nth-child(3n) {
+	border-bottom-width:2px;
+}
+table.maintable tr td:nth-child(1) {
+	border-left-width:2px;
+}
+table.maintable tr td:nth-child(3n) {
+	border-right-width:2px;
+}

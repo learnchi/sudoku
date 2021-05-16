@@ -128,7 +128,21 @@ let order=[81,74,78,18,11,15,54,47,51,
 	68,64,66,32,28,30,59,55,57,
 	71,67,70,35,31,34,62,58,61
 ];
-for (let od = 1; od <82; od++) {
+
+// 候補を一時保管
+let historyArray = [[],[],[],[],[],[],[],[],[],
+		[],[],[],[],[],[],[],[],[],
+		[],[],[],[],[],[],[],[],[],
+		[],[],[],[],[],[],[],[],[],
+		[],[],[],[],[],[],[],[],[],
+		[],[],[],[],[],[],[],[],[],
+		[],[],[],[],[],[],[],[],[],
+		[],[],[],[],[],[],[],[],[],
+		[],[],[],[],[],[],[],[],[]];
+
+console.log("問題作成開始");
+let od = 1;
+while (od > 0 && od <= 81) {
 	let odIdx = order.indexOf(od);
 ///** 端から順に数字をあてはめる **/
 //for (let r = 0; r < 9; r++) {
@@ -165,25 +179,59 @@ for (let od = 1; od <82; od++) {
 
 		// 1～9の候補を順に探す
 		var kh = 1;
-		while (chkArray.indexOf(kh) > -1) {
-			// チェック対象配列内に同じ数字があったら次の数字
+		while (chkArray.indexOf(kh) > -1 ||
+				data.rows[r].cols[c].disp == kh ||
+				historyArray[odIdx].indexOf(kh) > -1) {
+			// チェック対象配列内、自分自身、履歴に同じ数字があったら次の数字
 			kh++;
 			// 候補がなくなった
 			if (kh > 9) {
-				console.log("r["+r+"]c["+c+"]で失敗");
 				break;
 			}
 		}
 
 		if (kh <= 9) {// 候補
 			data.rows[r].cols[c].disp=kh;
+			historyArray[odIdx].push(kh);
+			od++;
 		} else { // 候補がない
 			data.rows[r].cols[c].disp="-";
+			historyArray[odIdx] = [];
+			od--;
 		}
 
 //	} // for c
 //} // for r
 }
+
+console.log("問題作成完了");
+
+//完成診断
+var warp  = [0,0,0,0,0,0,0,0,0]; // 縦
+var weft = [0,0,0,0,0,0,0,0,0]; // 横
+var grup = [0,0,0,0,0,0,0,0,0]; // グループ
+for (let r = 0; r < 9; r++) {
+	// ブロックのための添え字
+	let currGroupRow = Math.floor(r/3); // 1～3行目は0、4～6行目は1、7～9行目は2
+	for (let c = 0; c < 9; c++) {
+		warp[r] += parseInt(data.rows[r].cols[c].disp);
+		weft[c] += parseInt(data.rows[r].cols[c].disp);
+
+		// ブロックのための添え字
+		let currGroupCol = Math.floor(c/3); // 1～3列目は0、4～6列目は1、7～9列目は2
+		let grup_pt = currGroupRow*3 + currGroupCol;
+		grup[grup_pt] += parseInt(data.rows[r].cols[c].disp);
+	}
+}
+// それぞれの数値を全部足すと45になることを確認
+if (warp.toString() == [45,45,45,45,45,45,45,45,45].toString() &&
+		weft.toString() == [45,45,45,45,45,45,45,45,45].toString() &&
+		grup.toString() == [45,45,45,45,45,45,45,45,45].toString() ) {
+	console.log("OK!!");
+} else {
+	console.log("NG!!!");
+}
+
 var app = new Vue({
 	el: '#tbl',
 	data: data
