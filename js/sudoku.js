@@ -2,7 +2,7 @@
  * sudoku.js
  */
 'use strict';
-var data = {
+var table = {
 		rows: [
 			{cols: [
 				{ disp: 'a' },
@@ -106,357 +106,136 @@ var data = {
 		]
 	};
 
-// 1: 中央ブロックを生成
-for (let n=1; n<=9; n++) {
-	while(true) {
-		let pt = Math.floor(Math.random()*9); // 0～8のrandom
-		let r = Math.floor(pt/3)+3; // 3<=r<=5
-		let c = Math.floor(pt%3)+3; // 3<=c<=5
-		// console.log("n="+n+" pt="+pt+" r="+r+" c="+c);
-		if (data.rows[r].cols[c].disp == "e") {
-			// まだnが入っていない場合だけnを入れてwhileを抜ける
-			data.rows[r].cols[c].disp = n;
-			break;
+/** 埋める順番を決める **/
+let order=[81,74,78,18,11,15,54,47,51,
+	77,73,75,14,10,12,50,46,48,
+	80,76,79,17,13,16,53,49,52,
+	45,38,42,9,2,6,27,20,24,
+	41,37,39,5,1,3,23,19,21,
+	44,40,43,8,4,7,26,22,25,
+	72,65,69,36,29,33,63,56,60,
+	68,64,66,32,28,30,59,55,57,
+	71,67,70,35,31,34,62,58,61
+];
+
+// 候補を一時保管
+let historyArray = [[],[],[],[],[],[],[],[],[],
+		[],[],[],[],[],[],[],[],[],
+		[],[],[],[],[],[],[],[],[],
+		[],[],[],[],[],[],[],[],[],
+		[],[],[],[],[],[],[],[],[],
+		[],[],[],[],[],[],[],[],[],
+		[],[],[],[],[],[],[],[],[],
+		[],[],[],[],[],[],[],[],[],
+		[],[],[],[],[],[],[],[],[]];
+
+let makeSudoku = function(data, od) {
+	let odIdx = order.indexOf(od);
+
+	var r = Math.floor(odIdx/9);
+	var c = odIdx%9;
+
+	// チェック対象配列を作成
+	var chkArray = [];
+	// 縦
+	data.rows.forEach((item, index)=> {
+		if (index !== r) {
+			chkArray.push(item.cols[c].disp);
+		}
+	});
+	// 横
+	data.rows[r].cols.forEach((item, index)=> {
+		if (index !== c) {
+			chkArray.push(item.disp);
+		}
+	});
+	// ブロック
+	let currGroupRow = Math.floor(r/3); // 1～3行目は0、4～6行目は1、7～9行目は2
+	let currGroupCol = Math.floor(c/3); // 1～3列目は0、4～6列目は1、7～9列目は2
+
+	for (let gr = currGroupRow*3; gr < currGroupRow*3+3; gr++) {
+		for (let gc = currGroupCol*3; gc < currGroupCol*3+3; gc++) {
+			if (gr !== r && gc != c) {
+				chkArray.push(data.rows[gr].cols[gc].disp);
+			}
 		}
 	}
-}
 
-// 2: 右ブロックを生成
-// 3: 左ブロックを生成
-// 3～5列目の　3行目、4行目、5行目を 6～8列目の　4行目、5行目、3行目にコピーするパターンを0、
-// 3～5列目の　3行目、4行目、5行目を 6～8列目の　5行目、3行目、4行目にコピーするパターンを1 とする
+	// 1～9の候補を探す
+	let khArray = [1,2,3,4,5,6,7,8,9];
+	khArray.sort(() => Math.random() - 0.5);
+	let khArrayIdx = 0;
+	do {
+		if (khArrayIdx++ >= 9) {
+			// 候補がなくなった
+			break;
+		}
+	// チェック対象配列内、自分自身、履歴に同じ数字があったら次の数字
+	} while (chkArray.indexOf(khArray[khArrayIdx]) > -1 ||
+			data.rows[r].cols[c].disp == khArray[khArrayIdx] ||
+			historyArray[odIdx].indexOf(khArray[khArrayIdx]) > -1)
 
-if (Math.floor(Math.random()*2) == 0) { // 0か1のrandom
-	data.rows[4].cols[6].disp = data.rows[3].cols[3].disp;
-	data.rows[4].cols[7].disp = data.rows[3].cols[4].disp;
-	data.rows[4].cols[8].disp = data.rows[3].cols[5].disp;
-
-	data.rows[5].cols[6].disp = data.rows[4].cols[3].disp;
-	data.rows[5].cols[7].disp = data.rows[4].cols[4].disp;
-	data.rows[5].cols[8].disp = data.rows[4].cols[5].disp;
-
-	data.rows[3].cols[6].disp = data.rows[5].cols[3].disp;
-	data.rows[3].cols[7].disp = data.rows[5].cols[4].disp;
-	data.rows[3].cols[8].disp = data.rows[5].cols[5].disp;
-
-	data.rows[5].cols[0].disp = data.rows[3].cols[3].disp;
-	data.rows[5].cols[1].disp = data.rows[3].cols[4].disp;
-	data.rows[5].cols[2].disp = data.rows[3].cols[5].disp;
-
-	data.rows[3].cols[0].disp = data.rows[4].cols[3].disp;
-	data.rows[3].cols[1].disp = data.rows[4].cols[4].disp;
-	data.rows[3].cols[2].disp = data.rows[4].cols[5].disp;
-
-	data.rows[4].cols[0].disp = data.rows[5].cols[3].disp;
-	data.rows[4].cols[1].disp = data.rows[5].cols[4].disp;
-	data.rows[4].cols[2].disp = data.rows[5].cols[5].disp;
-
-} else {
-	data.rows[5].cols[6].disp = data.rows[3].cols[3].disp;
-	data.rows[5].cols[7].disp = data.rows[3].cols[4].disp;
-	data.rows[5].cols[8].disp = data.rows[3].cols[5].disp;
-
-	data.rows[3].cols[6].disp = data.rows[4].cols[3].disp;
-	data.rows[3].cols[7].disp = data.rows[4].cols[4].disp;
-	data.rows[3].cols[8].disp = data.rows[4].cols[5].disp;
-
-	data.rows[4].cols[6].disp = data.rows[5].cols[3].disp;
-	data.rows[4].cols[7].disp = data.rows[5].cols[4].disp;
-	data.rows[4].cols[8].disp = data.rows[5].cols[5].disp;
-
-	data.rows[4].cols[0].disp = data.rows[3].cols[3].disp;
-	data.rows[4].cols[1].disp = data.rows[3].cols[4].disp;
-	data.rows[4].cols[2].disp = data.rows[3].cols[5].disp;
-
-	data.rows[5].cols[0].disp = data.rows[4].cols[3].disp;
-	data.rows[5].cols[1].disp = data.rows[4].cols[4].disp;
-	data.rows[5].cols[2].disp = data.rows[4].cols[5].disp;
-
-	data.rows[3].cols[0].disp = data.rows[5].cols[3].disp;
-	data.rows[3].cols[1].disp = data.rows[5].cols[4].disp;
-	data.rows[3].cols[2].disp = data.rows[5].cols[5].disp;
-}
-
-// 4: 上ブロックを生成
-// 5: 下ブロックを生成
-
-//3～5行目の　3列目、4列目、5列目を 0～2行目の　4列目、5列目、3列目にコピーするパターンを0、
-//3～5行目の　3列目、4列目、5列目を 6～8行目の　5列目、3列目、4列目にコピーするパターンを1 とする
-
-if (Math.floor(Math.random()*2) == 0) {// 0か1のrandom
-	data.rows[0].cols[4].disp = data.rows[3].cols[3].disp;
-	data.rows[0].cols[5].disp = data.rows[3].cols[4].disp;
-	data.rows[0].cols[3].disp = data.rows[3].cols[5].disp;
-
-	data.rows[1].cols[4].disp = data.rows[4].cols[3].disp;
-	data.rows[1].cols[5].disp = data.rows[4].cols[4].disp;
-	data.rows[1].cols[3].disp = data.rows[4].cols[5].disp;
-
-	data.rows[2].cols[4].disp = data.rows[5].cols[3].disp;
-	data.rows[2].cols[5].disp = data.rows[5].cols[4].disp;
-	data.rows[2].cols[3].disp = data.rows[5].cols[5].disp;
-
-	data.rows[6].cols[5].disp = data.rows[3].cols[3].disp;
-	data.rows[6].cols[3].disp = data.rows[3].cols[4].disp;
-	data.rows[6].cols[4].disp = data.rows[3].cols[5].disp;
-
-	data.rows[7].cols[5].disp = data.rows[4].cols[3].disp;
-	data.rows[7].cols[3].disp = data.rows[4].cols[4].disp;
-	data.rows[7].cols[4].disp = data.rows[4].cols[5].disp;
-
-	data.rows[8].cols[5].disp = data.rows[5].cols[3].disp;
-	data.rows[8].cols[3].disp = data.rows[5].cols[4].disp;
-	data.rows[8].cols[4].disp = data.rows[5].cols[5].disp;
-} else {
-	data.rows[0].cols[5].disp = data.rows[3].cols[3].disp;
-	data.rows[0].cols[3].disp = data.rows[3].cols[4].disp;
-	data.rows[0].cols[4].disp = data.rows[3].cols[5].disp;
-
-	data.rows[1].cols[5].disp = data.rows[4].cols[3].disp;
-	data.rows[1].cols[3].disp = data.rows[4].cols[4].disp;
-	data.rows[1].cols[4].disp = data.rows[4].cols[5].disp;
-
-	data.rows[2].cols[5].disp = data.rows[5].cols[3].disp;
-	data.rows[2].cols[3].disp = data.rows[5].cols[4].disp;
-	data.rows[2].cols[4].disp = data.rows[5].cols[5].disp;
-
-	data.rows[6].cols[4].disp = data.rows[3].cols[3].disp;
-	data.rows[6].cols[5].disp = data.rows[3].cols[4].disp;
-	data.rows[6].cols[3].disp = data.rows[3].cols[5].disp;
-
-	data.rows[7].cols[4].disp = data.rows[4].cols[3].disp;
-	data.rows[7].cols[5].disp = data.rows[4].cols[4].disp;
-	data.rows[7].cols[3].disp = data.rows[4].cols[5].disp;
-
-	data.rows[8].cols[4].disp = data.rows[5].cols[3].disp;
-	data.rows[8].cols[5].disp = data.rows[5].cols[4].disp;
-	data.rows[8].cols[3].disp = data.rows[5].cols[5].disp;
-}
-
-
-// 6: 右上ブロックを生成
-// 7: 左上ブロックを生成
-//3～5列目の　0行目、1行目、2行目を 6～8列目の　1行目、2行目、0行目にコピーするパターンを0、
-//3～5列目の　0行目、1行目、2行目を 6～8列目の　2行目、0行目、1行目にコピーするパターンを1 とする
-
-if (Math.floor(Math.random()*2) == 0) { // 0か1のrandom
-	data.rows[1].cols[6].disp = data.rows[0].cols[3].disp;
-	data.rows[1].cols[7].disp = data.rows[0].cols[4].disp;
-	data.rows[1].cols[8].disp = data.rows[0].cols[5].disp;
-
-	data.rows[2].cols[6].disp = data.rows[1].cols[3].disp;
-	data.rows[2].cols[7].disp = data.rows[1].cols[4].disp;
-	data.rows[2].cols[8].disp = data.rows[1].cols[5].disp;
-
-	data.rows[0].cols[6].disp = data.rows[2].cols[3].disp;
-	data.rows[0].cols[7].disp = data.rows[2].cols[4].disp;
-	data.rows[0].cols[8].disp = data.rows[2].cols[5].disp;
-
-	data.rows[2].cols[0].disp = data.rows[0].cols[3].disp;
-	data.rows[2].cols[1].disp = data.rows[0].cols[4].disp;
-	data.rows[2].cols[2].disp = data.rows[0].cols[5].disp;
-
-	data.rows[0].cols[0].disp = data.rows[1].cols[3].disp;
-	data.rows[0].cols[1].disp = data.rows[1].cols[4].disp;
-	data.rows[0].cols[2].disp = data.rows[1].cols[5].disp;
-
-	data.rows[1].cols[0].disp = data.rows[2].cols[3].disp;
-	data.rows[1].cols[1].disp = data.rows[2].cols[4].disp;
-	data.rows[1].cols[2].disp = data.rows[2].cols[5].disp;
-
-} else {
-	data.rows[2].cols[6].disp = data.rows[0].cols[3].disp;
-	data.rows[2].cols[7].disp = data.rows[0].cols[4].disp;
-	data.rows[2].cols[8].disp = data.rows[0].cols[5].disp;
-
-	data.rows[0].cols[6].disp = data.rows[1].cols[3].disp;
-	data.rows[0].cols[7].disp = data.rows[1].cols[4].disp;
-	data.rows[0].cols[8].disp = data.rows[1].cols[5].disp;
-
-	data.rows[1].cols[6].disp = data.rows[2].cols[3].disp;
-	data.rows[1].cols[7].disp = data.rows[2].cols[4].disp;
-	data.rows[1].cols[8].disp = data.rows[2].cols[5].disp;
-
-	data.rows[1].cols[0].disp = data.rows[0].cols[3].disp;
-	data.rows[1].cols[1].disp = data.rows[0].cols[4].disp;
-	data.rows[1].cols[2].disp = data.rows[0].cols[5].disp;
-
-	data.rows[2].cols[0].disp = data.rows[1].cols[3].disp;
-	data.rows[2].cols[1].disp = data.rows[1].cols[4].disp;
-	data.rows[2].cols[2].disp = data.rows[1].cols[5].disp;
-
-	data.rows[0].cols[0].disp = data.rows[2].cols[3].disp;
-	data.rows[0].cols[1].disp = data.rows[2].cols[4].disp;
-	data.rows[0].cols[2].disp = data.rows[2].cols[5].disp;
-}
-
-
-// 8: 右上ブロックを生成
-// 9: 左上ブロックを生成
-// 3～5列目の　6行目、7行目、8行目を 6～8列目の　7行目、8行目、6行目にコピーするパターンを0、
-// 3～5列目の　6行目、7行目、8行目を 6～8列目の　8行目、6行目、7行目にコピーするパターンを1 とする
-
-if (Math.floor(Math.random()*2) == 0) { // 0か1のrandom
-	data.rows[7].cols[6].disp = data.rows[6].cols[3].disp;
-	data.rows[7].cols[7].disp = data.rows[6].cols[4].disp;
-	data.rows[7].cols[8].disp = data.rows[6].cols[5].disp;
-
-	data.rows[8].cols[6].disp = data.rows[7].cols[3].disp;
-	data.rows[8].cols[7].disp = data.rows[7].cols[4].disp;
-	data.rows[8].cols[8].disp = data.rows[7].cols[5].disp;
-
-	data.rows[6].cols[6].disp = data.rows[8].cols[3].disp;
-	data.rows[6].cols[7].disp = data.rows[8].cols[4].disp;
-	data.rows[6].cols[8].disp = data.rows[8].cols[5].disp;
-
-	data.rows[8].cols[0].disp = data.rows[6].cols[3].disp;
-	data.rows[8].cols[1].disp = data.rows[6].cols[4].disp;
-	data.rows[8].cols[2].disp = data.rows[6].cols[5].disp;
-
-	data.rows[6].cols[0].disp = data.rows[7].cols[3].disp;
-	data.rows[6].cols[1].disp = data.rows[7].cols[4].disp;
-	data.rows[6].cols[2].disp = data.rows[7].cols[5].disp;
-
-	data.rows[7].cols[0].disp = data.rows[8].cols[3].disp;
-	data.rows[7].cols[1].disp = data.rows[8].cols[4].disp;
-	data.rows[7].cols[2].disp = data.rows[8].cols[5].disp;
-
-} else {
-	data.rows[8].cols[6].disp = data.rows[6].cols[3].disp;
-	data.rows[8].cols[7].disp = data.rows[6].cols[4].disp;
-	data.rows[8].cols[8].disp = data.rows[6].cols[5].disp;
-
-	data.rows[6].cols[6].disp = data.rows[7].cols[3].disp;
-	data.rows[6].cols[7].disp = data.rows[7].cols[4].disp;
-	data.rows[6].cols[8].disp = data.rows[7].cols[5].disp;
-
-	data.rows[7].cols[6].disp = data.rows[8].cols[3].disp;
-	data.rows[7].cols[7].disp = data.rows[8].cols[4].disp;
-	data.rows[7].cols[8].disp = data.rows[8].cols[5].disp;
-
-	data.rows[7].cols[0].disp = data.rows[6].cols[3].disp;
-	data.rows[7].cols[1].disp = data.rows[6].cols[4].disp;
-	data.rows[7].cols[2].disp = data.rows[6].cols[5].disp;
-
-	data.rows[8].cols[0].disp = data.rows[7].cols[3].disp;
-	data.rows[8].cols[1].disp = data.rows[7].cols[4].disp;
-	data.rows[8].cols[2].disp = data.rows[7].cols[5].disp;
-
-	data.rows[6].cols[0].disp = data.rows[8].cols[3].disp;
-	data.rows[6].cols[1].disp = data.rows[8].cols[4].disp;
-	data.rows[6].cols[2].disp = data.rows[8].cols[5].disp;
-}
-
-for (let n=0; n<7; n+=3) {
-	// シャッフル：0～2行目/3～5行目/6～8行目でx行目とy行目を交換
-	var x = Math.floor(Math.random()*3+n); // 1周目：0～2のrandom 2周目：3～5のrandom 3周目：6～8のrandom
-	var y = Math.floor(Math.random()*3+n); // 1周目：0～2のrandom 2周目：3～5のrandom 3周目：6～8のrandom
-
-	console.log("x="+x+" y="+y);
-	var tempX = [];
-	if (x !== y) {
-		tempX[0] = data.rows[x].cols[0].disp;
-		tempX[1] = data.rows[x].cols[1].disp;
-		tempX[2] = data.rows[x].cols[2].disp;
-		tempX[3] = data.rows[x].cols[3].disp;
-		tempX[4] = data.rows[x].cols[4].disp;
-		tempX[5] = data.rows[x].cols[5].disp;
-		tempX[6] = data.rows[x].cols[6].disp;
-		tempX[7] = data.rows[x].cols[7].disp;
-		tempX[8] = data.rows[x].cols[8].disp;
-
-		data.rows[x].cols[0].disp = data.rows[y].cols[0].disp;
-		data.rows[x].cols[1].disp = data.rows[y].cols[1].disp;
-		data.rows[x].cols[2].disp = data.rows[y].cols[2].disp;
-		data.rows[x].cols[3].disp = data.rows[y].cols[3].disp;
-		data.rows[x].cols[4].disp = data.rows[y].cols[4].disp;
-		data.rows[x].cols[5].disp = data.rows[y].cols[5].disp;
-		data.rows[x].cols[6].disp = data.rows[y].cols[6].disp;
-		data.rows[x].cols[7].disp = data.rows[y].cols[7].disp;
-		data.rows[x].cols[8].disp = data.rows[y].cols[8].disp;
-
-		data.rows[y].cols[0].disp = tempX[0];
-		data.rows[y].cols[1].disp = tempX[1];
-		data.rows[y].cols[2].disp = tempX[2];
-		data.rows[y].cols[3].disp = tempX[3];
-		data.rows[y].cols[4].disp = tempX[4];
-		data.rows[y].cols[5].disp = tempX[5];
-		data.rows[y].cols[6].disp = tempX[6];
-		data.rows[y].cols[7].disp = tempX[7];
-		data.rows[y].cols[8].disp = tempX[8];
+	if (khArrayIdx < 9) {// 候補がある場合は表示と履歴記録をして次のセルに進む
+		data.rows[r].cols[c].disp=khArray[khArrayIdx];
+		historyArray[odIdx].push(khArray[khArrayIdx]);
+		od++;
+	} else { // 候補がない場合は自分自身の表示と履歴をリセットして前のセルをやり直す
+		data.rows[r].cols[c].disp="-";
+		historyArray[odIdx] = [];
+		od--;
 	}
-
-}
-
-for (let n=0; n<7; n+=3) {
-	// シャッフル：0～2列目/3～5列目/6～8列目でx列目とy列目を交換
-	var x = Math.floor(Math.random()*3+n); // 1周目：0～2のrandom 2周目：3～5のrandom 3周目：6～8のrandom
-	var y = Math.floor(Math.random()*3+n); // 1周目：0～2のrandom 2周目：3～5のrandom 3周目：6～8のrandom
-
-	console.log("x="+x+" y="+y);
-	var tempX = [];
-	if (x !== y) {
-		tempX[0] = data.rows[0].cols[x].disp;
-		tempX[1] = data.rows[1].cols[x].disp;
-		tempX[2] = data.rows[2].cols[x].disp;
-		tempX[3] = data.rows[3].cols[x].disp;
-		tempX[4] = data.rows[4].cols[x].disp;
-		tempX[5] = data.rows[5].cols[x].disp;
-		tempX[6] = data.rows[6].cols[x].disp;
-		tempX[7] = data.rows[7].cols[x].disp;
-		tempX[8] = data.rows[8].cols[x].disp;
-
-		data.rows[0].cols[x].disp = data.rows[0].cols[y].disp;
-		data.rows[1].cols[x].disp = data.rows[1].cols[y].disp;
-		data.rows[2].cols[x].disp = data.rows[2].cols[y].disp;
-		data.rows[3].cols[x].disp = data.rows[3].cols[y].disp;
-		data.rows[4].cols[x].disp = data.rows[4].cols[y].disp;
-		data.rows[5].cols[x].disp = data.rows[5].cols[y].disp;
-		data.rows[6].cols[x].disp = data.rows[6].cols[y].disp;
-		data.rows[7].cols[x].disp = data.rows[7].cols[y].disp;
-		data.rows[8].cols[x].disp = data.rows[8].cols[y].disp;
-
-		data.rows[0].cols[y].disp = tempX[0];
-		data.rows[1].cols[y].disp = tempX[1];
-		data.rows[2].cols[y].disp = tempX[2];
-		data.rows[3].cols[y].disp = tempX[3];
-		data.rows[4].cols[y].disp = tempX[4];
-		data.rows[5].cols[y].disp = tempX[5];
-		data.rows[6].cols[y].disp = tempX[6];
-		data.rows[7].cols[y].disp = tempX[7];
-		data.rows[8].cols[y].disp = tempX[8];
-	}
-
-}
+	return od;
+};
 
 
-// 完成診断
-var warp  = [0,0,0,0,0,0,0,0,0]; // 縦
-var weft = [0,0,0,0,0,0,0,0,0]; // 横
-var grup = [0,0,0,0,0,0,0,0,0]; // グループ
-for (let r = 0; r < 9; r++) {
-	// ブロックのための添え字
-	let currGroupRow = Math.floor(r/3); // 1～3行目は0、4～6行目は1、7～9行目は2
-	for (let c = 0; c < 9; c++) {
-		warp[r] += parseInt(data.rows[r].cols[c].disp);
-		weft[c] += parseInt(data.rows[r].cols[c].disp);
-
+//完成診断
+let checkSudoku = function(data) {
+	var warp  = [0,0,0,0,0,0,0,0,0]; // 縦
+	var weft = [0,0,0,0,0,0,0,0,0]; // 横
+	var grup = [0,0,0,0,0,0,0,0,0]; // グループ
+	for (let r = 0; r < 9; r++) {
 		// ブロックのための添え字
-		let currGroupCol = Math.floor(c/3); // 1～3列目は0、4～6列目は1、7～9列目は2
-		let grup_pt = currGroupRow*3 + currGroupCol;
-		grup[grup_pt] += parseInt(data.rows[r].cols[c].disp);
+		let currGroupRow = Math.floor(r/3); // 1～3行目は0、4～6行目は1、7～9行目は2
+		for (let c = 0; c < 9; c++) {
+			warp[r] += parseInt(data.rows[r].cols[c].disp);
+			weft[c] += parseInt(data.rows[r].cols[c].disp);
+
+			// ブロックのための添え字
+			let currGroupCol = Math.floor(c/3); // 1～3列目は0、4～6列目は1、7～9列目は2
+			let grup_pt = currGroupRow*3 + currGroupCol;
+			grup[grup_pt] += parseInt(data.rows[r].cols[c].disp);
+		}
+	}
+	// それぞれの数値を全部足すと45になることを確認
+	if (warp.toString() == [45,45,45,45,45,45,45,45,45].toString() &&
+			weft.toString() == [45,45,45,45,45,45,45,45,45].toString() &&
+			grup.toString() == [45,45,45,45,45,45,45,45,45].toString() ) {
+		console.log("check is OK!!");
+	} else {
+		console.log("check is NG!!!");
 	}
 }
-// それぞれの数値を全部足すと45になることを確認
-if (warp.toString() == [45,45,45,45,45,45,45,45,45].toString() &&
-		weft.toString() == [45,45,45,45,45,45,45,45,45].toString() &&
-		grup.toString() == [45,45,45,45,45,45,45,45,45].toString() ) {
-	console.log("OK!!");
-} else {
-	console.log("NG!!!");
-}
+
 
 var app = new Vue({
 	el: '#tbl',
-	data: data
+	data: {table: table},
+	created: function(){
+		console.log("created");
+		// 問題作成
+		let od = 1;
+		var id = setInterval(function () {
+			od = makeSudoku(this.table, od);
+			if (od < 1 || od > 81) {
+	            // タイマー停止
+	            clearInterval(id);
+	            // チェック
+	    		checkSudoku(this.table);
+			}
+		}, 1);
+
+	},
+	update: function(){
+		console.log("update");
+	},
 })
