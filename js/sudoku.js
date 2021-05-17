@@ -118,9 +118,6 @@ let order=[81,74,78,18,11,15,54,47,51,
 	71,67,70,35,31,34,62,58,61
 ];
 
-// 順番をバラバラに
-order.sort(() => Math.random() - 0.5);
-
 // 候補を一時保管
 let historyArray = [[],[],[],[],[],[],[],[],[],
 		[],[],[],[],[],[],[],[],[],
@@ -164,24 +161,25 @@ let makeSudoku = function(data, od) {
 		}
 	}
 
-	// 1～9の候補を順に探す
-	var kh = 1;
-	while (chkArray.indexOf(kh) > -1 ||
-			data.rows[r].cols[c].disp == kh ||
-			historyArray[odIdx].indexOf(kh) > -1) {
-		// チェック対象配列内、自分自身、履歴に同じ数字があったら次の数字
-		kh++;
-		// 候補がなくなった
-		if (kh > 9) {
+	// 1～9の候補を探す
+	let khArray = [1,2,3,4,5,6,7,8,9];
+	khArray.sort(() => Math.random() - 0.5);
+	let khArrayIdx = 0;
+	do {
+		if (khArrayIdx++ >= 9) {
+			// 候補がなくなった
 			break;
 		}
-	}
+	// チェック対象配列内、自分自身、履歴に同じ数字があったら次の数字
+	} while (chkArray.indexOf(khArray[khArrayIdx]) > -1 ||
+			data.rows[r].cols[c].disp == khArray[khArrayIdx] ||
+			historyArray[odIdx].indexOf(khArray[khArrayIdx]) > -1)
 
-	if (kh <= 9) {// 候補
-		data.rows[r].cols[c].disp=kh;
-		historyArray[odIdx].push(kh);
+	if (khArrayIdx < 9) {// 候補がある場合は表示と履歴記録をして次のセルに進む
+		data.rows[r].cols[c].disp=khArray[khArrayIdx];
+		historyArray[odIdx].push(khArray[khArrayIdx]);
 		od++;
-	} else { // 候補がない
+	} else { // 候補がない場合は自分自身の表示と履歴をリセットして前のセルをやり直す
 		data.rows[r].cols[c].disp="-";
 		historyArray[odIdx] = [];
 		od--;
