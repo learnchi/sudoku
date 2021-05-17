@@ -118,9 +118,8 @@ let order=[81,74,78,18,11,15,54,47,51,
 	71,67,70,35,31,34,62,58,61
 ];
 
-//// 順番をバラバラに
-//order.sort(() => Math.random() - 0.5);
-//console.log(order);
+// 順番をバラバラに
+order.sort(() => Math.random() - 0.5);
 
 // 候補を一時保管
 let historyArray = [[],[],[],[],[],[],[],[],[],
@@ -225,11 +224,18 @@ var app = new Vue({
 	data: {table: table},
 	created: function(){
 		console.log("created");
+		// 問題作成
 		let od = 1;
-		while (od > 0 && od <= 81) {
+		var id = setInterval(function () {
 			od = makeSudoku(this.table, od);
-		}
-		checkSudoku(this.table);
+			if (od < 1 || od > 81) {
+	            // タイマー停止
+	            clearInterval(id);
+	            // チェック
+	    		checkSudoku(this.table);
+			}
+		}, 1);
+
 	},
 	update: function(){
 		console.log("update");
