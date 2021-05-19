@@ -5,103 +5,103 @@
 var table = {
 		rows: [
 			{cols: [
-				{ disp: 'a' },
-				{ disp: 'a' },
-				{ disp: 'a' },
-				{ disp: 'b' },
-				{ disp: 'b' },
-				{ disp: 'b' },
-				{ disp: 'c' },
-				{ disp: 'c' },
-				{ disp: 'c' }
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false}
 			]},
 			{cols: [
-				{ disp: 'a' },
-				{ disp: 'a' },
-				{ disp: 'a' },
-				{ disp: 'b' },
-				{ disp: 'b' },
-				{ disp: 'b' },
-				{ disp: 'c' },
-				{ disp: 'c' },
-				{ disp: 'c' }
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false}
 			]},
 			{cols: [
-				{ disp: 'a' },
-				{ disp: 'a' },
-				{ disp: 'a' },
-				{ disp: 'b' },
-				{ disp: 'b' },
-				{ disp: 'b' },
-				{ disp: 'c' },
-				{ disp: 'c' },
-				{ disp: 'c' }
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false}
 			]},
 			{cols: [
-				{ disp: 'd' },
-				{ disp: 'd' },
-				{ disp: 'd' },
-				{ disp: 'e' },
-				{ disp: 'e' },
-				{ disp: 'e' },
-				{ disp: 'f' },
-				{ disp: 'f' },
-				{ disp: 'f' }
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false}
 			]},
 			{cols: [
-				{ disp: 'd' },
-				{ disp: 'd' },
-				{ disp: 'd' },
-				{ disp: 'e' },
-				{ disp: 'e' },
-				{ disp: 'e' },
-				{ disp: 'f' },
-				{ disp: 'f' },
-				{ disp: 'f' }
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false}
 			]},
 			{cols: [
-				{ disp: 'd' },
-				{ disp: 'd' },
-				{ disp: 'd' },
-				{ disp: 'e' },
-				{ disp: 'e' },
-				{ disp: 'e' },
-				{ disp: 'f' },
-				{ disp: 'f' },
-				{ disp: 'f' }
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false}
 			]},
 			{cols: [
-				{ disp: 'g' },
-				{ disp: 'g' },
-				{ disp: 'g' },
-				{ disp: 'h' },
-				{ disp: 'h' },
-				{ disp: 'h' },
-				{ disp: 'i' },
-				{ disp: 'i' },
-				{ disp: 'i' }
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false}
 			]},
 			{cols: [
-				{ disp: 'g' },
-				{ disp: 'g' },
-				{ disp: 'g' },
-				{ disp: 'h' },
-				{ disp: 'h' },
-				{ disp: 'h' },
-				{ disp: 'i' },
-				{ disp: 'i' },
-				{ disp: 'i' }
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false}
 			]},
 			{cols: [
-				{ disp: 'g' },
-				{ disp: 'g' },
-				{ disp: 'g' },
-				{ disp: 'h' },
-				{ disp: 'h' },
-				{ disp: 'h' },
-				{ disp: 'i' },
-				{ disp: 'i' },
-				{ disp: 'i' }
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
+				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false}
 			]}
 		]
 	};
@@ -238,4 +238,69 @@ var app = new Vue({
 	update: function(){
 		console.log("update");
 	},
+	methods: {
+		mouseover: function (r, c) {
+			this.table.rows[r].cols[c].onmouse = true;
+
+			// グループの添え字
+			let currGroupRow = Math.floor(r/3); // 1～3行目は0、4～6行目は1、7～9行目は2
+			let currGroupCol = Math.floor(c/3); // 1～3列目は0、4～6列目は1、7～9列目は2
+
+			for (let cr = 0; cr < 9; cr++) {
+				for (let cc = 0; cc < 9; cc++) {
+
+					// グループの添え字
+					let chkGroupRow = Math.floor(cr/3); // 1～3行目は0、4～6行目は1、7～9行目は2
+					let chkGroupCol = Math.floor(cc/3); // 1～3列目は0、4～6列目は1、7～9列目は2
+
+					if (currGroupRow == chkGroupRow && currGroupCol == chkGroupCol) {
+						// 同じグループ
+						table.rows[cr].cols[cc].relatedblock = true;
+					}
+
+					if (r == cr || c == cc) {
+						// 縦または横が同じ
+						table.rows[cr].cols[cc].relatedblock = true;
+					}
+
+					if (table.rows[r].cols[c].disp == table.rows[cr].cols[cc].disp) {
+						// 中身の数字が同じ
+						table.rows[cr].cols[cc].samenumber = true;
+					}
+				}
+			}
+
+		},
+		mouseleave: function (r, c) {
+			this.table.rows[r].cols[c].onmouse = false;
+
+			// グループの添え字
+			let currGroupRow = Math.floor(r/3); // 1～3行目は0、4～6行目は1、7～9行目は2
+			let currGroupCol = Math.floor(c/3); // 1～3列目は0、4～6列目は1、7～9列目は2
+
+			for (let cr = 0; cr < 9; cr++) {
+				for (let cc = 0; cc < 9; cc++) {
+
+					// グループの添え字
+					let chkGroupRow = Math.floor(cr/3); // 1～3行目は0、4～6行目は1、7～9行目は2
+					let chkGroupCol = Math.floor(cc/3); // 1～3列目は0、4～6列目は1、7～9列目は2
+
+					if (currGroupRow == chkGroupRow && currGroupCol == chkGroupCol) {
+						// 同じグループ
+						table.rows[cr].cols[cc].relatedblock = false;
+					}
+
+					if (r == cr || c == cc) {
+						// 縦または横が同じ
+						table.rows[cr].cols[cc].relatedblock = false;
+					}
+
+					if (table.rows[r].cols[c].disp == table.rows[cr].cols[cc].disp) {
+						// 中身の数字が同じ
+						table.rows[cr].cols[cc].samenumber = false;
+					}
+				}
+			}
+		}
+	}
 })

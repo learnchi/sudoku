@@ -14,3 +14,13 @@ table.maintable tr td:nth-child(1) {
 table.maintable tr td:nth-child(3n) {
 	border-right-width:2px;
 }
+
+table.maintable tr td.onmouse {
+	background-color: #f7d6e6 !important;
+}
+table.maintable tr td.samenumber {
+	background-color: #e0cffc;
+}
+table.maintable tr td.relatedblock {
+	background-color: #f3edfe;
+}
