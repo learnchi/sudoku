@@ -2,111 +2,27 @@
  * sudoku.js
  */
 'use strict';
-var table = {
-		rows: [
-			{cols: [
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false}
-			]},
-			{cols: [
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false}
-			]},
-			{cols: [
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false}
-			]},
-			{cols: [
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false}
-			]},
-			{cols: [
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false}
-			]},
-			{cols: [
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false}
-			]},
-			{cols: [
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false}
-			]},
-			{cols: [
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false}
-			]},
-			{cols: [
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false},
-				{ disp: '-', onmouse: false, samenumber: false, relatedblock: false}
-			]}
-		]
-	};
 
-/** 埋める順番を決める **/
+//tableを初期化
+let initializeData = () => {
+	// 初期化したブロック
+	let blankBlock = { disp: '-', onmouse: false, samenumber: false, relatedblock: false};
+
+	let colsArr = [];
+	for (let i = 0; i < 9; i++) {
+		colsArr.push(JSON.parse(JSON.stringify(blankBlock)));
+	}
+
+	let rowsArr = [];
+	for (let j = 0; j < 9; j++) {
+		rowsArr.push({cols: JSON.parse(JSON.stringify(colsArr))});
+	}
+	let rows = {rows: rowsArr};
+	return rows;
+};
+let data = initializeData();
+
+// 埋める順番を決める
 let order=[81,74,78,18,11,15,54,47,51,
 	77,73,75,14,10,12,50,46,48,
 	80,76,79,17,13,16,53,49,52,
@@ -129,14 +45,15 @@ let historyArray = [[],[],[],[],[],[],[],[],[],
 		[],[],[],[],[],[],[],[],[],
 		[],[],[],[],[],[],[],[],[]];
 
-let makeSudoku = function(data, od) {
+let makeSudoku = function(od) {
+
 	let odIdx = order.indexOf(od);
 
-	var r = Math.floor(odIdx/9);
-	var c = odIdx%9;
+	let r = Math.floor(odIdx/9);
+	let c = odIdx%9;
 
 	// チェック対象配列を作成
-	var chkArray = [];
+	let chkArray = [];
 	// 縦
 	data.rows.forEach((item, index)=> {
 		if (index !== r) {
@@ -189,10 +106,10 @@ let makeSudoku = function(data, od) {
 
 
 //完成診断
-let checkSudoku = function(data) {
-	var warp  = [0,0,0,0,0,0,0,0,0]; // 縦
-	var weft = [0,0,0,0,0,0,0,0,0]; // 横
-	var grup = [0,0,0,0,0,0,0,0,0]; // グループ
+let checkSudoku = function() {
+	let warp  = [0,0,0,0,0,0,0,0,0]; // 縦
+	let weft = [0,0,0,0,0,0,0,0,0]; // 横
+	let grup = [0,0,0,0,0,0,0,0,0]; // グループ
 	for (let r = 0; r < 9; r++) {
 		// ブロックのための添え字
 		let currGroupRow = Math.floor(r/3); // 1～3行目は0、4～6行目は1、7～9行目は2
@@ -216,21 +133,22 @@ let checkSudoku = function(data) {
 	}
 }
 
-
-var app = new Vue({
+let app = new Vue({
 	el: '#tbl',
-	data: {table: table},
+	data:{table : data
+	},
 	created: function(){
 		console.log("created");
-		// 問題作成
+
+		// 問題の完成形を作成
 		let od = 1;
-		var id = setInterval(function () {
-			od = makeSudoku(this.table, od);
+		let id = setInterval(function () {
+			od = makeSudoku(od);
 			if (od < 1 || od > 81) {
 	            // タイマー停止
 	            clearInterval(id);
 	            // チェック
-	    		checkSudoku(this.table);
+	    		checkSudoku();
 			}
 		}, 1);
 
@@ -255,17 +173,17 @@ var app = new Vue({
 
 					if (currGroupRow == chkGroupRow && currGroupCol == chkGroupCol) {
 						// 同じグループ
-						table.rows[cr].cols[cc].relatedblock = true;
+						this.table.rows[cr].cols[cc].relatedblock = true;
 					}
 
 					if (r == cr || c == cc) {
 						// 縦または横が同じ
-						table.rows[cr].cols[cc].relatedblock = true;
+						this.table.rows[cr].cols[cc].relatedblock = true;
 					}
 
-					if (table.rows[r].cols[c].disp == table.rows[cr].cols[cc].disp) {
+					if (this.table.rows[r].cols[c].disp == this.table.rows[cr].cols[cc].disp) {
 						// 中身の数字が同じ
-						table.rows[cr].cols[cc].samenumber = true;
+						this.table.rows[cr].cols[cc].samenumber = true;
 					}
 				}
 			}
@@ -287,17 +205,17 @@ var app = new Vue({
 
 					if (currGroupRow == chkGroupRow && currGroupCol == chkGroupCol) {
 						// 同じグループ
-						table.rows[cr].cols[cc].relatedblock = false;
+						this.table.rows[cr].cols[cc].relatedblock = false;
 					}
 
 					if (r == cr || c == cc) {
 						// 縦または横が同じ
-						table.rows[cr].cols[cc].relatedblock = false;
+						this.table.rows[cr].cols[cc].relatedblock = false;
 					}
 
-					if (table.rows[r].cols[c].disp == table.rows[cr].cols[cc].disp) {
+					if (this.table.rows[r].cols[c].disp == this.table.rows[cr].cols[cc].disp) {
 						// 中身の数字が同じ
-						table.rows[cr].cols[cc].samenumber = false;
+						this.table.rows[cr].cols[cc].samenumber = false;
 					}
 				}
 			}
