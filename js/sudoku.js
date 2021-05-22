@@ -4,7 +4,19 @@
 'use strict';
 
 // 表示
-let disp=['-','-','-','-','-','-','-','-','-',
+let disp=['','','','','','','','','',
+	'','','','','','','','','',
+	'','','','','','','','','',
+	'','','','','','','','','',
+	'','','','','','','','','',
+	'','','','','','','','','',
+	'','','','','','','','','',
+	'','','','','','','','','',
+	'','','','','','','','','',
+];
+
+//完成形
+let ans=['-','-','-','-','-','-','-','-','-',
 	'-','-','-','-','-','-','-','-','-',
 	'-','-','-','-','-','-','-','-','-',
 	'-','-','-','-','-','-','-','-','-',
@@ -14,6 +26,7 @@ let disp=['-','-','-','-','-','-','-','-','-',
 	'-','-','-','-','-','-','-','-','-',
 	'-','-','-','-','-','-','-','-','-',
 ];
+
 // マウスオーバー時のスタイルの適用
 let isOnmouse=[false,false,false,false,false,false,false,false,false,
 	false,false,false,false,false,false,false,false,false,
@@ -66,13 +79,13 @@ let makeSudoku = function(od) {
 	// 縦
 	for (let i=0; i<9; i++) {
 		if (i !== r) {
-			chkArray.push(disp[i*9+c]);
+			chkArray.push(ans[i*9+c]);
 		}
 	}
 	// 横
 	for (let i = 0; i<9; i++) {
 		if (i !== c) {
-			chkArray.push(disp[r*9+i]);
+			chkArray.push(ans[r*9+i]);
 		}
 	}
 
@@ -83,7 +96,7 @@ let makeSudoku = function(od) {
 	for (let gr = currGroupRow*3; gr < currGroupRow*3+3; gr++) {
 		for (let gc = currGroupCol*3; gc < currGroupCol*3+3; gc++) {
 			if (gr !== r && gc != c) {
-				chkArray.push(disp[gr*9+gc]);
+				chkArray.push(ans[gr*9+gc]);
 			}
 		}
 	}
@@ -100,15 +113,15 @@ let makeSudoku = function(od) {
 		}
 	// チェック対象配列内、自分自身、履歴に同じ数字があったら次の数字
 	} while (chkArray.indexOf(khArray[khArrayIdx]) > -1 ||
-			disp[odIdx] == khArray[khArrayIdx] ||
+			ans[odIdx] == khArray[khArrayIdx] ||
 			historyArray[odIdx].indexOf(khArray[khArrayIdx]) > -1)
 
 	if (khArrayIdx < 9) {// 候補がある場合は表示と履歴記録をして次のセルに進む
-		disp[odIdx]=khArray[khArrayIdx];
+		ans[odIdx]=khArray[khArrayIdx];
 		historyArray[odIdx].push(khArray[khArrayIdx]);
 		od++;
 	} else { // 候補がない場合は自分自身の表示と履歴をリセットして前のセルをやり直す
-		disp[odIdx]="-";
+		ans[odIdx]="-";
 		historyArray[odIdx] = [];
 		od--;
 	}
@@ -117,7 +130,7 @@ let makeSudoku = function(od) {
 
 
 //完成診断
-let checkSudoku = function() {
+let checkSudoku = function(testee) {
 	let warp  = [0,0,0,0,0,0,0,0,0]; // 縦
 	let weft = [0,0,0,0,0,0,0,0,0]; // 横
 	let grup = [0,0,0,0,0,0,0,0,0]; // グループ
@@ -125,13 +138,13 @@ let checkSudoku = function() {
 		// ブロックのための添え字
 		let currGroupRow = Math.floor(r/3); // 1～3行目は0、4～6行目は1、7～9行目は2
 		for (let c = 0; c < 9; c++) {
-			warp[r] += parseInt(disp[r*9+c]);
-			weft[c] += parseInt(disp[r*9+c]);
+			warp[r] += parseInt(testee[r*9+c]);
+			weft[c] += parseInt(testee[r*9+c]);
 
 			// ブロックのための添え字
 			let currGroupCol = Math.floor(c/3); // 1～3列目は0、4～6列目は1、7～9列目は2
 			let grup_pt = currGroupRow*3 + currGroupCol;
-			grup[grup_pt] += parseInt(disp[r*9+c]);
+			grup[grup_pt] += parseInt(testee[r*9+c]);
 		}
 	}
 	// それぞれの数値を全部足すと45になることを確認
@@ -145,14 +158,20 @@ let checkSudoku = function() {
 }
 //問題に穴を空ける
 let digSudoku = function() {
-
 	console.log("IN digSudoku");
+
+	// 一旦全部表示
+	// disp = ans.slice();
+	ans.forEach( (e, i )   => Vue.set(disp, i, e));
+
+	console.log(disp);
+
 }
-
-
+// ////////////////////////////////////////////
 let app = new Vue({
 	el: '#tbl',
 	data:{disp : disp,
+		ans: ans,
 		onmouse: isOnmouse,
 		samenumber: isSamenumber,
 		relatedblock: isRelatedblock,
@@ -167,7 +186,7 @@ let app = new Vue({
 //	            // タイマー停止
 //	            clearInterval(id);
 //	            // チェック
-//	    		checkSudoku();
+//	    		checkSudoku(ans);
 //	    		// 問題に穴を空ける
 //	    		digSudoku();
 //			}
@@ -184,7 +203,7 @@ let app = new Vue({
 				od = makeSudoku(od);
 			}
             // チェック
-    		checkSudoku();
+    		checkSudoku(this.ans);
     		// 問題に穴を空ける
     		digSudoku();
 
@@ -197,8 +216,14 @@ let app = new Vue({
 	methods: {
 		mouseover: function (r, c) {
 			let idx = r*9+c;
-			console.log("IN mouseover("+r+", "+c+") index="+idx);
-			this.onmouse[idx] = true;
+
+			// this.onmouse[idx] = true;
+			Vue.set(this.onmouse, idx, true);
+
+			if (this.disp[idx] == '-' || this.disp[idx] == '') {
+				// 表示がない場合は変更しない
+				return;
+			}
 
 			// グループの添え字
 			let currGroupRow = Math.floor(r/3); // 1～3行目は0、4～6行目は1、7～9行目は2
@@ -214,55 +239,33 @@ let app = new Vue({
 
 					if (currGroupRow == chkGroupRow && currGroupCol == chkGroupCol) {
 						// 同じグループ
-						this.relatedblock[gidx] = true;
+						// this.relatedblock[gidx] = true;
+						Vue.set(this.relatedblock, gidx, true);
 					}
 
 					if (r == cr || c == cc) {
 						// 縦または横が同じ
-						this.relatedblock[gidx] = true;
+						// this.relatedblock[gidx] = true;
+						Vue.set(this.relatedblock, gidx, true);
 					}
 
 					if (this.disp[idx] == this.disp[gidx]) {
 						// 中身の数字が同じ
-						this.samenumber[gidx] = true;
+						// this.samenumber[gidx] = true;
+						Vue.set(this.samenumber, gidx, true);
 					}
 				}
 			}
 
 		},
 		mouseleave: function (r, c) {
-			let idx = r*9+c;
-			console.log("IN mouseleave("+r+", "+c+") index="+idx);
-			this.onmouse[idx] = true;
+			this.onmouse.forEach( (e, i )      => Vue.set(this.onmouse, i, false));
+			this.relatedblock.forEach( (e, i ) => Vue.set(this.relatedblock, i, false));
+			this.samenumber.forEach( (e, i )   => Vue.set(this.samenumber, i, false));
 
-			// グループの添え字
-			let currGroupRow = Math.floor(r/3); // 1～3行目は0、4～6行目は1、7～9行目は2
-			let currGroupCol = Math.floor(c/3); // 1～3列目は0、4～6列目は1、7～9列目は2
-
-			for (let cr = 0; cr < 9; cr++) {
-				for (let cc = 0; cc < 9; cc++) {
-					let gidx = cr*9+cc;
-
-					// グループの添え字
-					let chkGroupRow = Math.floor(cr/3); // 1～3行目は0、4～6行目は1、7～9行目は2
-					let chkGroupCol = Math.floor(cc/3); // 1～3列目は0、4～6列目は1、7～9列目は2
-
-					if (currGroupRow == chkGroupRow && currGroupCol == chkGroupCol) {
-						// 同じグループ
-						this.relatedblock[gidx] = false;
-					}
-
-					if (r == cr || c == cc) {
-						// 縦または横が同じ
-						this.relatedblock[gidx] = false;
-					}
-
-					if (this.disp[idx] == this.disp[gidx]) {
-						// 中身の数字が同じ
-						this.samenumber[gidx] = false;
-					}
-				}
-			}
+//			this.onmouse.forEach( (e, i, array)      => array[i] = false);
+//			this.relatedblock.forEach( (e, i, array) => array[i] = false);
+//			this.samenumber.forEach( (e, i, array)   => array[i] = false);
 
 		}
 	}

@@ -13,13 +13,14 @@
 <body>
 
 <div class="container">
+
     <table id="tbl" class="table maintable">
     <tbody>
     	<tr v-for="r in 9">
     		<td v-for="c in 9" class="text-center fs-2 fw-bolder"
                 v-on:mouseover="mouseover((r-1), (c-1))"
                 v-on:mouseleave="mouseleave((r-1), (c-1))"
-                v-bind:class="{ 
+                v-bind:class="{
                 	onmouse: onmouse[(r-1)*9 + (c-1) ],
                 	samenumber: samenumber[(r-1)*9 + (c-1) ],
                 	relatedblock: relatedblock[(r-1)*9 + (c-1) ]}">
