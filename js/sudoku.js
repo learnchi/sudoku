@@ -161,11 +161,78 @@ let digSudoku = function() {
 	console.log("IN digSudoku");
 
 	// 一旦全部表示
-	// disp = ans.slice();
-	ans.forEach( (e, i )   => Vue.set(disp, i, e));
+	ans.forEach( (e, i )  => Vue.set(disp, i, e));
 
-	console.log(disp);
+	// 埋める順番の表を再利用
+	order.sort(() => Math.random() - 0.5);// ランダムな配列にする
 
+	for (let cnt=1; cnt<82; cnt++) {
+
+		let idx = order.indexOf(cnt);
+		let r = Math.floor(idx/9);
+		let c = idx%9;
+
+		console.log("r="+r+" c="+c+" idx="+idx);
+
+		// 穴の候補チェック
+		let currBoard = disp.slice();
+		currBoard[idx] = '.';
+		if (chkDig(r, c, currBoard) >= 0 ) {
+			currBoard.forEach( (e, i )  => Vue.set(disp, i, e));
+		}
+		console.log("disp=");
+		console.log(disp);
+
+	}
+
+}
+// 穴の候補チェック
+let chkDig = function(r, c, currBoard) {
+	// 穴に入る候補を挙げる
+	let khArray = [1,2,3,4,5,6,7,8,9];
+
+	// 縦
+	for (let i=0; i<9; i++) {
+		if (i !== r && currBoard[i*9+c] !== '.') {
+			// 縦列に候補配列と同一値がある場合、候補配列から除外
+			if (khArray.indexOf(currBoard[i*9+c]) > -1) {
+				khArray = khArray.filter(kh => kh !== currBoard[i*9+c]);
+			}
+		}
+	}
+
+	// 横
+	for (let i = 0; i<9; i++) {
+		if (i !== c && currBoard[r*9+i] !== '.') {
+			// 横列に候補配列と同一値がある場合、候補配列から除外
+			if (khArray.indexOf(currBoard[r*9+i]) > -1) {
+				khArray = khArray.filter(kh => kh !== currBoard[r*9+i]);
+			}
+		}
+	}
+
+	// ブロック
+	let currGroupRow = Math.floor(r/3); // 1～3行目は0、4～6行目は1、7～9行目は2
+	let currGroupCol = Math.floor(c/3); // 1～3列目は0、4～6列目は1、7～9列目は2
+
+	for (let gr = currGroupRow*3; gr < currGroupRow*3+3; gr++) {
+		for (let gc = currGroupCol*3; gc < currGroupCol*3+3; gc++) {
+			if (gr !== r && gc != c  && currBoard[gr*9+gc] !== '.') {
+				khArray = khArray.filter(kh => kh !== currBoard[gr*9+gc]);
+			}
+		}
+	}
+	console.log("khArray=");
+	console.log(khArray);
+
+	// 候補が1つしかない場合はこの穴は正しいと判断
+	if (khArray.length == 1) {
+		console.log("=== OK");
+		return 0;
+	} else {
+		console.log("=== NG");
+		return -1;
+	}
 }
 // ////////////////////////////////////////////
 let app = new Vue({
