@@ -16,11 +16,14 @@ table.maintable tr td:nth-child(3n) {
 }
 
 table.maintable tr td.onmouse {
-	background-color: #f7d6e6 !important;
+	background-color: #f7d6e6;
 }
 table.maintable tr td.samenumber {
 	background-color: #e0cffc;
 }
 table.maintable tr td.relatedblock {
 	background-color: #f3edfe;
+}
+table.maintable tr td.focused {
+	background-color: #fff3cd;
 }

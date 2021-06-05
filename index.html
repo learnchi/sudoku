@@ -12,23 +12,30 @@
 </head>
 <body>
 
-<div class="container">
+<div class="container" id="sudoku">
 
-    <table id="tbl" class="table maintable">
+    <table class="table maintable">
     <tbody>
     	<tr v-for="r in 9">
-    		<td v-for="c in 9" class="text-center fs-2 fw-bolder"
+    		<td v-for="c in 9" class="text-center fs-2 fw-bolder p-0"
                 v-on:mouseover="mouseover((r-1), (c-1))"
                 v-on:mouseleave="mouseleave((r-1), (c-1))"
+                v-on:click="clickedBoard((r-1), (c-1))"
                 v-bind:class="{
                 	onmouse: onmouse[(r-1)*9 + (c-1) ],
                 	samenumber: samenumber[(r-1)*9 + (c-1) ],
-                	relatedblock: relatedblock[(r-1)*9 + (c-1) ]}">
-    			{{ computeddisp[(r-1)*9 + (c-1) ]}}
+                	relatedblock: relatedblock[(r-1)*9 + (c-1) ],
+                	focused: focused[(r-1)*9 + (c-1)]}">
+                	<p>{{ disp[(r-1)*9 + (c-1) ]}}</p>
 			</td>
     	</tr>
     </tbody>
     </table>
+
+    <div class="row">
+    	<div class="col" v-for="i in 9"><button type="button" v-on:click="clickedNumber(i)" class="btn btn-outline-dark"> {{ i }} </button></div>
+    </div>
+
 </div>
 
 

@@ -43,6 +43,7 @@ let isSamenumber = isOnmouse.slice();
 // 同一ブロック時のスタイルの適用
 let isRelatedblock = isOnmouse.slice();
 ;
+let isFocused = isOnmouse.slice();
 
 // 埋める順番を決める
 let order=[81,74,78,18,11,15,54,47,51,
@@ -176,7 +177,7 @@ let digSudoku = function() {
 
 		// 穴の候補チェック
 		let currBoard = disp.slice();
-		currBoard[idx] = '.';
+		currBoard[idx] = ''; // 空欄
 		if (chkDig(r, c, currBoard) >= 0 ) {
 			currBoard.forEach( (e, i )  => Vue.set(disp, i, e));
 		}
@@ -235,51 +236,34 @@ let chkDig = function(r, c, currBoard) {
 	}
 }
 // ////////////////////////////////////////////
-let app = new Vue({
-	el: '#tbl',
+let board = new Vue({
+	el: '#sudoku',
 	data:{disp : disp,
 		ans: ans,
 		onmouse: isOnmouse,
 		samenumber: isSamenumber,
 		relatedblock: isRelatedblock,
+		focused: isFocused,
 	},
-	created: function(){
-		console.log("created");
-//		// 問題の完成形を作成
-//		let od = 1;
-//		let id = setInterval(function () {
-//			od = makeSudoku(od);
-//			if (od < 1 || od > 81) {
-//	            // タイマー停止
-//	            clearInterval(id);
-//	            // チェック
-//	    		checkSudoku(ans);
-//	    		// 問題に穴を空ける
-//	    		digSudoku();
-//			}
-//		}, 1);
+	computed: function () {
+		console.log('IN computed');
+	},
+	created: function () {
+		console.log('IN created');
 
-	},
-	computed: {
-		computeddisp: function () {
-			console.log('IN computed');
+		// 問題の完成形を作成
+		let od = 1;
+		while (od >0 && od <= 81) {
+			od = makeSudoku(od);
+		}
+        // チェック
+		checkSudoku(this.ans);
+		// 問題に穴を空ける
+		digSudoku();
 
-			// 問題の完成形を作成
-			let od = 1;
-			while (od >0 && od <= 81) {
-				od = makeSudoku(od);
-			}
-            // チェック
-    		checkSudoku(this.ans);
-    		// 問題に穴を空ける
-    		digSudoku();
-
-			return this.disp;
-	    }
-	},
-	update: function(){
-		console.log("update");
-	},
+		console.log('OUT created');
+		return this.disp;
+    },
 	methods: {
 		mouseover: function (r, c) {
 			let idx = r*9+c;
@@ -330,10 +314,26 @@ let app = new Vue({
 			this.relatedblock.forEach( (e, i ) => Vue.set(this.relatedblock, i, false));
 			this.samenumber.forEach( (e, i )   => Vue.set(this.samenumber, i, false));
 
-//			this.onmouse.forEach( (e, i, array)      => array[i] = false);
-//			this.relatedblock.forEach( (e, i, array) => array[i] = false);
-//			this.samenumber.forEach( (e, i, array)   => array[i] = false);
+		},
+		clickedBoard: function(r, c) {
+			let idx = r*9+c;
 
+			// 同一セルをクリックした場合
+			if (this.focused[idx] == true) {
+				// 全部オフにして終了
+				this.focused.forEach( (e, i ) => Vue.set(this.focused, i, false));
+			} else {
+				// 全部オフにしたあとクリックしたセルをオン
+				this.focused.forEach( (e, i ) => Vue.set(this.focused, i, false));
+				Vue.set(this.focused, idx, true);
+			}
+		},
+		clickedNumber: function(idx) {
+			let ptIdx = this.focused.indexOf(true);
+			console.log(ptIdx);
+			if (ptIdx > -1) {
+				Vue.set(this.disp, ptIdx, idx);
+			}
 		}
 	}
 })
