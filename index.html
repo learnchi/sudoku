@@ -23,9 +23,12 @@
                 v-on:click="clickedBoard((r-1), (c-1))"
                 v-bind:class="{
                 	onmouse: onmouse[(r-1)*9 + (c-1) ],
+                	focused: focused[(r-1)*9 + (c-1)],
                 	samenumber: samenumber[(r-1)*9 + (c-1) ],
                 	relatedblock: relatedblock[(r-1)*9 + (c-1) ],
-                	focused: focused[(r-1)*9 + (c-1)]}">
+                	errinput: errinput[(r-1)*9 + (c-1)],
+                	userput: userput[(r-1)*9 + (c-1)]
+                }">
                 	<p>{{ disp[(r-1)*9 + (c-1) ]}}</p>
 			</td>
     	</tr>

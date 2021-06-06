@@ -27,3 +27,9 @@ table.maintable tr td.relatedblock {
 table.maintable tr td.focused {
 	background-color: #fff3cd;
 }
+table.maintable tr td.userput {
+	color:#520dc2;
+}
+table.maintable tr td.errinput {
+	color:#dc3545;
+}

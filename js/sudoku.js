@@ -42,8 +42,12 @@ let isOnmouse=[false,false,false,false,false,false,false,false,false,
 let isSamenumber = isOnmouse.slice();
 // 同一ブロック時のスタイルの適用
 let isRelatedblock = isOnmouse.slice();
-;
+// ユーザーがクリックした
 let isFocused = isOnmouse.slice();
+// ユーザー操作で数値が編集された
+let isUserPut = isOnmouse.slice();
+// アラート
+let isErrinput = isOnmouse.slice();
 
 // 埋める順番を決める
 let order=[81,74,78,18,11,15,54,47,51,
@@ -159,7 +163,6 @@ let checkSudoku = function(testee) {
 }
 //問題に穴を空ける
 let digSudoku = function() {
-	console.log("IN digSudoku");
 
 	// 一旦全部表示
 	ans.forEach( (e, i )  => Vue.set(disp, i, e));
@@ -173,19 +176,13 @@ let digSudoku = function() {
 		let r = Math.floor(idx/9);
 		let c = idx%9;
 
-		console.log("r="+r+" c="+c+" idx="+idx);
-
 		// 穴の候補チェック
 		let currBoard = disp.slice();
 		currBoard[idx] = ''; // 空欄
 		if (chkDig(r, c, currBoard) >= 0 ) {
 			currBoard.forEach( (e, i )  => Vue.set(disp, i, e));
 		}
-		console.log("disp=");
-		console.log(disp);
-
 	}
-
 }
 // 穴の候補チェック
 let chkDig = function(r, c, currBoard) {
@@ -194,7 +191,7 @@ let chkDig = function(r, c, currBoard) {
 
 	// 縦
 	for (let i=0; i<9; i++) {
-		if (i !== r && currBoard[i*9+c] !== '.') {
+		if (i !== r && currBoard[i*9+c] !== '') {
 			// 縦列に候補配列と同一値がある場合、候補配列から除外
 			if (khArray.indexOf(currBoard[i*9+c]) > -1) {
 				khArray = khArray.filter(kh => kh !== currBoard[i*9+c]);
@@ -204,7 +201,7 @@ let chkDig = function(r, c, currBoard) {
 
 	// 横
 	for (let i = 0; i<9; i++) {
-		if (i !== c && currBoard[r*9+i] !== '.') {
+		if (i !== c && currBoard[r*9+i] !== '') {
 			// 横列に候補配列と同一値がある場合、候補配列から除外
 			if (khArray.indexOf(currBoard[r*9+i]) > -1) {
 				khArray = khArray.filter(kh => kh !== currBoard[r*9+i]);
@@ -218,22 +215,56 @@ let chkDig = function(r, c, currBoard) {
 
 	for (let gr = currGroupRow*3; gr < currGroupRow*3+3; gr++) {
 		for (let gc = currGroupCol*3; gc < currGroupCol*3+3; gc++) {
-			if (gr !== r && gc != c  && currBoard[gr*9+gc] !== '.') {
+			if (gr !== r && gc != c  && currBoard[gr*9+gc] !== '') {
 				khArray = khArray.filter(kh => kh !== currBoard[gr*9+gc]);
 			}
 		}
 	}
-	console.log("khArray=");
-	console.log(khArray);
 
 	// 候補が1つしかない場合はこの穴は正しいと判断
 	if (khArray.length == 1) {
-		console.log("=== OK");
 		return 0;
 	} else {
-		console.log("=== NG");
 		return -1;
 	}
+}
+// 引数の箇所の入力が有効かどうかをチェック
+let chkPt = function(idx) {
+
+	let r = Math.floor(idx/9);
+	let c = idx%9;
+	let currNumber = disp[idx];
+	let returnArray = [];
+
+	// 縦
+	for (let i=0; i<9; i++) {
+		if (i !== r && disp[i*9+c] == currNumber) {
+			// 縦列に候補配列と同一値がある場合
+			returnArray.push(i*9+c);
+		}
+	}
+
+	// 横
+	for (let i = 0; i<9; i++) {
+		if (i !== c && disp[r*9+i] == currNumber) {
+			// 横列に候補配列と同一値がある場合
+			returnArray.push(r*9+i);
+		}
+	}
+
+	// ブロック
+	let currGroupRow = Math.floor(r/3); // 1～3行目は0、4～6行目は1、7～9行目は2
+	let currGroupCol = Math.floor(c/3); // 1～3列目は0、4～6列目は1、7～9列目は2
+
+	for (let gr = currGroupRow*3; gr < currGroupRow*3+3; gr++) {
+		for (let gc = currGroupCol*3; gc < currGroupCol*3+3; gc++) {
+			if (gr !== r && gc != c  && disp[gr*9+gc]  == currNumber) {
+				returnArray.push(gr*9+gc);
+			}
+		}
+	}
+
+	return returnArray;
 }
 // ////////////////////////////////////////////
 let board = new Vue({
@@ -244,12 +275,10 @@ let board = new Vue({
 		samenumber: isSamenumber,
 		relatedblock: isRelatedblock,
 		focused: isFocused,
-	},
-	computed: function () {
-		console.log('IN computed');
+		userput: isUserPut,
+		errinput: isErrinput,
 	},
 	created: function () {
-		console.log('IN created');
 
 		// 問題の完成形を作成
 		let od = 1;
@@ -261,7 +290,8 @@ let board = new Vue({
 		// 問題に穴を空ける
 		digSudoku();
 
-		console.log('OUT created');
+console.log("answer ==========")+
+console.log(this.ans);
 		return this.disp;
     },
 	methods: {
@@ -329,10 +359,31 @@ let board = new Vue({
 			}
 		},
 		clickedNumber: function(idx) {
+			// クリックでフォーカスされている箇所を検索
 			let ptIdx = this.focused.indexOf(true);
-			console.log(ptIdx);
-			if (ptIdx > -1) {
-				Vue.set(this.disp, ptIdx, idx);
+			// フォーカスされている & 空欄またはユーザーが入力している
+			if (ptIdx > -1 && (this.disp[ptIdx] == "" || this.userput[ptIdx] == true)) {
+				Vue.set(this.disp, ptIdx, idx);		// ボタンの数字を表示
+				Vue.set(this.userput, ptIdx, true); // ユーザー入力クラスを適用
+
+				// エラー入力のリセット
+				this.errinput.forEach( (e, i )  => Vue.set(this.errinput, i, false));
+
+				// エラー入力チェック
+				let errPt = chkPt(ptIdx);
+				if (errPt.length > 0) {
+					// エラーがある場合errinputクラスを適用
+					errPt.forEach( (e, i )  => Vue.set(this.errinput, e, true));
+					Vue.set(this.errinput, ptIdx, true);
+				}
+
+				// 全部が入力されているか感知
+				if (this.disp.indexOf("") <= -1) {
+					// 全部埋まっている場合は答え合わせ
+					if (this.disp.toString() == this.ans.toString()) {
+						console.log("完成！！！！");
+					}
+				}
 			}
 		}
 	}
