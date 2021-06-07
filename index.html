@@ -2,6 +2,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <title>Sudoku</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
@@ -40,8 +42,10 @@
     </tbody>
     </table>
 
-    <div class="row mb-3">
-    	<div class="col" v-for="i in 9"><button type="button" v-on:click="clickedNumber(i)" class="btn btn-outline-dark"> {{ i }} </button></div>
+    <div class="row mb-3 justify-content-evenly flex-nowrap">
+    	<div class="col m-0 p-0" v-for="i in 9">
+    		<button type="button" v-on:click="clickedNumber(i)" class="btn btn-outline-dark w-100 h-100"> {{ i }} </button>
+    	</div>
     </div>
     <div class="row mb-3">
     	<div class="col">

@@ -1,4 +1,11 @@
 @charset "UTF-8";
+
+@media (min-width: 768px) {
+	#sudoku {
+		max-width:720px;
+	}
+}
+
 table.maintable tr td {
 	border-width:1px;
 }

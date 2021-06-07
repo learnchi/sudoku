@@ -369,8 +369,12 @@ let board = new Vue({
 				Vue.set(this.disp, ptIdx, idx);		// ボタンの数字を表示
 				Vue.set(this.userput, ptIdx, true); // ユーザー入力クラスを適用
 
-				// エラー入力のリセット
-				this.errinput.forEach( (e, i )  => Vue.set(this.errinput, i, false));
+				// 初期入力数値のエラー表示のリセット（ユーザーエラーは残す）
+				this.errinput.forEach( (e, i )  => {
+					if (this.userput[i] == false) {
+						Vue.set(this.errinput, i, false);
+					}
+				});
 
 				// エラー入力チェック
 				let errPt = chkPt(ptIdx);
@@ -394,17 +398,28 @@ let board = new Vue({
 		},
 		// 「解く」ボタンを押下
 		clickedSolve: function() {
-			console.log("clicked solve");
+			// 初期入力数値のエラー表示のリセット（ユーザーエラーは残す）
+			this.errinput.forEach( (e, i )  => {
+				if (this.userput[i] == false) {
+					Vue.set(this.errinput, i, false);
+				}
+			});
 
 			// 全候補を取得
 			let allKoho = [];
+			// 画面のマスを検証
 			this.disp.forEach( (e, idx ) => {
 				let cellKoho = [];
-				if (e == "") {
+				// 対象の画面マスが埋まっていないか、エラーの場合
+				if (e == "" || (this.userput[idx] == true && this.errinput[idx] == true)) {
+					// 表示をリセット
+					Vue.set(this.errinput, idx, false);
+					Vue.set(this.disp, idx, "");
 
 					let r = Math.floor(idx/9);
 					let c = idx%9;
 
+					// 対象の画面マスに対する候補。とりあえず全部挙げ、減らしていく。
 					cellKoho = [1,2,3,4,5,6,7,8,9];
 
 					// 縦
