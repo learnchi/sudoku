@@ -33,3 +33,7 @@ table.maintable tr td.userput {
 table.maintable tr td.errinput {
 	color:#dc3545;
 }
+
+#finished {
+	background-color:rgba(25, 135, 84, .5);
+}

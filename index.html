@@ -13,6 +13,11 @@
 <body>
 
 <div class="container" id="sudoku">
+<div id="finished"
+	class="text-white position-absolute top-0 start-0 w-100 h-100 align-items-center justify-content-center fs-1"
+	v-bind:class="{ 'd-none': isDNone, 'd-flex': isDFlex, }">
+	完成！！
+</div>
 
     <table class="table maintable">
     <tbody>
@@ -29,14 +34,20 @@
                 	errinput: errinput[(r-1)*9 + (c-1)],
                 	userput: userput[(r-1)*9 + (c-1)]
                 }">
-                	<p>{{ disp[(r-1)*9 + (c-1) ]}}</p>
+                	{{ disp[(r-1)*9 + (c-1) ]}}
 			</td>
     	</tr>
     </tbody>
     </table>
 
-    <div class="row">
+    <div class="row mb-3">
     	<div class="col" v-for="i in 9"><button type="button" v-on:click="clickedNumber(i)" class="btn btn-outline-dark"> {{ i }} </button></div>
+    </div>
+    <div class="row mb-3">
+    	<div class="col">
+    		<button type="button" v-bind:disabled="disabled" v-on:click="clickedSolve" class="btn btn-outline-dark" >解く</button>
+    		<span>押すごとに埋まっていきます。</span>
+    	</div>
     </div>
 
 </div>

@@ -3,6 +3,7 @@
  */
 'use strict';
 
+
 // 表示
 let disp=['','','','','','','','','',
 	'','','','','','','','','',
@@ -161,6 +162,7 @@ let checkSudoku = function(testee) {
 		console.log("check is NG!!!");
 	}
 }
+
 //問題に穴を空ける
 let digSudoku = function() {
 
@@ -277,6 +279,9 @@ let board = new Vue({
 		focused: isFocused,
 		userput: isUserPut,
 		errinput: isErrinput,
+		disabled: false,
+		isDNone: true,
+		isDFlex: false
 	},
 	created: function () {
 
@@ -290,8 +295,6 @@ let board = new Vue({
 		// 問題に穴を空ける
 		digSudoku();
 
-console.log("answer ==========")+
-console.log(this.ans);
 		return this.disp;
     },
 	methods: {
@@ -382,9 +385,81 @@ console.log(this.ans);
 					// 全部埋まっている場合は答え合わせ
 					if (this.disp.toString() == this.ans.toString()) {
 						console.log("完成！！！！");
+						this.disabled = true;
+						this.isDNone=false;
+						this.isDFlex=true;
 					}
 				}
 			}
+		},
+		// 「解く」ボタンを押下
+		clickedSolve: function() {
+			console.log("clicked solve");
+
+			// 全候補を取得
+			let allKoho = [];
+			this.disp.forEach( (e, idx ) => {
+				let cellKoho = [];
+				if (e == "") {
+
+					let r = Math.floor(idx/9);
+					let c = idx%9;
+
+					cellKoho = [1,2,3,4,5,6,7,8,9];
+
+					// 縦
+					for (let i=0; i<9; i++) {
+						if (i !== r) {
+							// 縦列にある数値を候補にしない
+							cellKoho = cellKoho.filter(kh => kh !== this.disp[i*9+c]);
+						}
+					}
+
+					// 横
+					for (let i = 0; i<9; i++) {
+						if (i !== c) {
+							// 横列にある数値を候補にしない
+							cellKoho = cellKoho.filter(kh => kh !== this.disp[r*9+i]);
+						}
+					}
+
+					// ブロック
+					let currGroupRow = Math.floor(r/3); // 1～3行目は0、4～6行目は1、7～9行目は2
+					let currGroupCol = Math.floor(c/3); // 1～3列目は0、4～6列目は1、7～9列目は2
+
+					for (let gr = currGroupRow*3; gr < currGroupRow*3+3; gr++) {
+						for (let gc = currGroupCol*3; gc < currGroupCol*3+3; gc++) {
+							if (gr !== r && gc != c) {
+								// グループにある数値を候補にしない
+								cellKoho = cellKoho.filter(kh => kh !== this.disp[gr*9+gc]);
+							}
+						}
+					}
+
+				}
+				allKoho[idx] = cellKoho;
+			});
+
+			// 候補が1つのマスを埋める
+			allKoho.forEach( (e, idx ) => {
+				if (e.length == 1) {
+					Vue.set(this.disp, idx, e[0]);		// 候補の数字を表示
+					Vue.set(this.userput, idx, true); // ユーザー入力クラスを適用
+				}
+			});
+
+			// 全部が入力されているか感知
+			if (this.disp.indexOf("") <= -1) {
+				// 全部埋まっている場合は答え合わせ
+				if (this.disp.toString() == this.ans.toString()) {
+					console.log("完成！！！！");
+					this.disabled = true;
+					this.isDNone=false;
+					this.isDFlex=true;
+
+				}
+			}
+
 		}
 	}
 })
